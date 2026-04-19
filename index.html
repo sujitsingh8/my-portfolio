@@ -648,7 +648,7 @@ document.addEventListener('keydown', e => {
   }
 });
 // Auto-open Python Projects modal when URL has #python-projects
-if (window.location.hash === '#python-projects') {
+if (window.location.hash === '#basic-python-projects') {
   window.addEventListener('load', () => {
     document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
     setTimeout(openPyModal, 600);
