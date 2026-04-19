@@ -133,6 +133,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:.85rem 2rem;display:
 .proj-link:hover{gap:.7rem}
 @media(max-width:768px){.proj-grid{grid-template-columns:1fr}}
 
+/* ── PYTHON TERMINAL VISUAL ── */
+#py-vis{background:linear-gradient(135deg,#050515,#0a0a25);display:flex;align-items:center;justify-content:center;position:relative}
+.py-terminal{width:85%;max-width:320px;background:rgba(5,5,20,.95);border:1px solid rgba(0,212,255,.3);border-radius:10px;padding:.8rem 1rem;font-family:'Courier New',monospace;font-size:.72rem;box-shadow:0 10px 30px rgba(0,212,255,.15)}
+.py-term-dots{display:flex;gap:.3rem;margin-bottom:.6rem}
+.py-term-dots span{width:8px;height:8px;border-radius:50%}
+.py-term-dots span:nth-child(1){background:#ff5f56}
+.py-term-dots span:nth-child(2){background:#ffbd2e}
+.py-term-dots span:nth-child(3){background:#27c93f}
+.py-term-line{color:var(--t2);margin-bottom:.2rem;white-space:nowrap;overflow:hidden}
+.py-term-line .prompt{color:var(--cyan)}
+.py-term-line .cmd{color:#a78bfa}
+.py-term-line .out{color:var(--amber)}
+.py-term-cursor{display:inline-block;width:7px;height:.9em;background:var(--cyan);vertical-align:text-bottom;animation:blink 1s step-end infinite;margin-left:2px}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,5,16,.85);backdrop-filter:blur(8px);z-index:9998;display:none;align-items:center;justify-content:center;padding:1.5rem;opacity:0;transition:opacity .3s}
+.modal-overlay.open{display:flex;opacity:1}
+.modal-box{background:linear-gradient(135deg,#0a0a25,#0f0f30);border:1px solid rgba(0,212,255,.25);border-radius:20px;padding:2.25rem 2rem;max-width:520px;width:100%;box-shadow:0 25px 80px rgba(0,212,255,.15);position:relative;transform:translateY(20px);transition:transform .3s}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s;font-size:.85rem}
+.modal-close:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);color:#ef4444}
+.modal-label{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:.5rem}
+.modal-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.4rem;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.modal-sub{font-size:.82rem;color:var(--t2);margin-bottom:1.5rem}
+.modal-list{display:flex;flex-direction:column;gap:.65rem}
+.modal-item{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--t1);transition:.25s}
+.modal-item:hover{border-color:var(--cyan);background:rgba(0,212,255,.06);transform:translateX(4px)}
+.modal-item-ico{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(124,58,237,.15));display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--cyan);flex-shrink:0}
+.modal-item-name{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:600;margin-bottom:.18rem}
+.modal-item-desc{font-size:.72rem;color:var(--t2)}
+.modal-item-arrow{margin-left:auto;color:var(--t2);font-size:.8rem;transition:.25s}
+.modal-item:hover .modal-item-arrow{color:var(--cyan);transform:translateX(3px)}
+
 /* ── EXPERIENCE ── */
 .exp-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem 2.25rem;position:relative;overflow:hidden;transition:.3s}
 .exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--cyan),var(--purple))}
@@ -247,7 +280,7 @@ footer .heart{color:#ef4444}
         <p>Now I'm in my first year, doing BS in Data Science at <strong style="color:var(--cyan)">IIT Madras</strong> and B.Tech in ECE at <strong style="color:var(--cyan)">Shri Mata Vaishno Devi University</strong>. Two degrees, a lot to learn, and honestly — I'm just getting started. My goal isn't to collect credentials. I want to understand things deeply, build things that actually work, and hopefully create something that makes a real difference.</p>
         <div class="stats-row">
           <div class="stat reveal"><span class="stat-n" data-target="3">0</span><span class="stat-l">Awards</span></div>
-          <div class="stat reveal"><span class="stat-n" data-target="2">0</span><span class="stat-l">Projects</span></div>
+          <div class="stat reveal"><span class="stat-n" data-target="3">0</span><span class="stat-l">Projects</span></div>
           <div class="stat reveal"><span class="stat-n" data-target="2">0</span><span class="stat-l">Degrees</span></div>
         </div>
       </div>
@@ -385,9 +418,81 @@ footer .heart{color:#ef4444}
           </div>
         </div>
       </a>
+      <!-- BASIC PYTHON PROJECTS — TERMINAL -->
+      <div class="proj-card reveal" onclick="openPyModal()" style="grid-column:1/-1">
+        <div class="proj-vis" id="py-vis">
+          <div class="py-terminal">
+            <div class="py-term-dots"><span></span><span></span><span></span></div>
+            <div class="py-term-line"><span class="prompt">$</span> <span class="cmd">python</span> expense_tracker.py</div>
+            <div class="py-term-line"><span class="out">&gt;&gt;</span> Loading entries...</div>
+            <div class="py-term-line"><span class="prompt">$</span> <span class="cmd">python</span> snake_game.py</div>
+            <div class="py-term-line"><span class="out">&gt;&gt;</span> Score: 12<span class="py-term-cursor"></span></div>
+          </div>
+        </div>
+        <div class="proj-body">
+          <h3 class="proj-title">Basic Python Projects — Terminal</h3>
+          <p class="proj-desc">A set of beginner-level Python projects built while learning the language. Click to choose which project to explore.</p>
+          <div class="proj-tags">
+            <span class="ptag ptag-c">Python</span>
+          </div>
+          <span class="proj-link">Explore projects <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- PYTHON PROJECTS MODAL -->
+<div class="modal-overlay" id="pyModal" onclick="closePyModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closePyModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-label">Choose a Project</div>
+    <div class="modal-title">Basic Python Projects</div>
+    <div class="modal-sub">Pick a project to view its code on GitHub</div>
+    <div class="modal-list">
+      <a href="https://github.com/sujitsingh8/expense-tracker" target="_blank" rel="noopener" class="modal-item">
+        <div class="modal-item-ico"><i class="fas fa-wallet"></i></div>
+        <div>
+          <div class="modal-item-name">Expense Tracker</div>
+          <div class="modal-item-desc">Log &amp; categorize daily expenses with monthly summaries</div>
+        </div>
+        <i class="fas fa-arrow-right modal-item-arrow"></i>
+      </a>
+      <a href="https://github.com/sujitsingh8/snake-game" target="_blank" rel="noopener" class="modal-item">
+        <div class="modal-item-ico"><i class="fas fa-gamepad"></i></div>
+        <div>
+          <div class="modal-item-name">Snake Game</div>
+          <div class="modal-item-desc">Classic Snake built using Python standard library</div>
+        </div>
+        <i class="fas fa-arrow-right modal-item-arrow"></i>
+      </a>
+      <a href="https://github.com/sujitsingh8/football-match-predictor" target="_blank" rel="noopener" class="modal-item">
+        <div class="modal-item-ico"><i class="fas fa-futbol"></i></div>
+        <div>
+          <div class="modal-item-name">Football Match Predictor</div>
+          <div class="modal-item-desc">Predicts match results based on basic team stats</div>
+        </div>
+        <i class="fas fa-arrow-right modal-item-arrow"></i>
+      </a>
+      <a href="https://github.com/sujitsingh8/qr-generator" target="_blank" rel="noopener" class="modal-item">
+        <div class="modal-item-ico"><i class="fas fa-qrcode"></i></div>
+        <div>
+          <div class="modal-item-name">QR Generator</div>
+          <div class="modal-item-desc">Generate QR codes for any URL or text input</div>
+        </div>
+        <i class="fas fa-arrow-right modal-item-arrow"></i>
+      </a>
+      <a href="https://github.com/sujitsingh8/typing-speed" target="_blank" rel="noopener" class="modal-item">
+        <div class="modal-item-ico"><i class="fas fa-keyboard"></i></div>
+        <div>
+          <div class="modal-item-name">Typing Speed Test</div>
+          <div class="modal-item-desc">Measures WPM &amp; accuracy in the terminal</div>
+        </div>
+        <i class="fas fa-arrow-right modal-item-arrow"></i>
+      </a>
+    </div>
+  </div>
+</div>
 
 <!-- EXPERIENCE -->
 <section class="section" id="experience">
@@ -525,6 +630,25 @@ footer .heart{color:#ef4444}
 
 <script>
 // ═══════════════════════════════════════════════
+//  PYTHON PROJECTS MODAL
+// ═══════════════════════════════════════════════
+function openPyModal() {
+  document.getElementById('pyModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePyModal(e) {
+  if (e && e.target.id !== 'pyModal' && !e.target.closest('.modal-close')) return;
+  document.getElementById('pyModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('pyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// ═══════════════════════════════════════════════
 //  HERO 3D SCENE
 // ═══════════════════════════════════════════════
 (function() {
@@ -660,12 +784,10 @@ footer .heart{color:#ef4444}
   const cam   = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
   cam.position.z = 9;
 
-  // Globe group — earth + markers rotate together
   const globeGroup = new THREE.Group();
-  globeGroup.rotation.y = 3.35; // lon 78°E (India) faces camera on load
+  globeGroup.rotation.y = 3.35;
   scene.add(globeGroup);
 
-  // Build themed Earth texture from satellite image
   function createThemedEarth() {
     const W = 2048, H = 1024;
     const cvs = document.createElement('canvas');
@@ -684,19 +806,16 @@ footer .heart{color:#ef4444}
         const g = d[i] * 0.299 + d[i+1] * 0.587 + d[i+2] * 0.114;
         let r, gr, b;
         if (g < 60) {
-          // Deep ocean — near-black navy
           const t = g / 60;
           r = Math.round(1 + t * 4);
           gr = Math.round(5 + t * 18);
           b = Math.round(18 + t * 32);
         } else if (g < 155) {
-          // Land — teal, clearly distinct from ocean
           const t = (g - 60) / 95;
           r = Math.round(5 + t * 45);
           gr = Math.round(80 + t * 130);
           b = Math.round(90 + t * 90);
         } else {
-          // Ice caps / clouds — bright cyan-white
           const t = (g - 155) / 100;
           r = Math.round(50 + t * 200);
           gr = Math.round(210 + t * 45);
@@ -705,7 +824,6 @@ footer .heart{color:#ef4444}
         d[i] = r; d[i+1] = gr; d[i+2] = b; d[i+3] = 255;
       }
       ctx.putImageData(id, 0, 0);
-      // Lat/lon grid
       ctx.strokeStyle = 'rgba(0,212,255,0.28)';
       ctx.lineWidth = 1.4;
       for (let lon = -180; lon <= 180; lon += 30) {
@@ -728,19 +846,16 @@ footer .heart{color:#ef4444}
     new THREE.MeshBasicMaterial({ map: createThemedEarth() })
   ));
 
-  // Thin cyan wireframe overlay for digital feel
   globeGroup.add(new THREE.Mesh(
     new THREE.SphereGeometry(3.02, 24, 24),
     new THREE.MeshBasicMaterial({ color: 0x00d4ff, wireframe: true, transparent: true, opacity: 0.06 })
   ));
 
-  // Cyan atmosphere glow
   scene.add(new THREE.Mesh(
     new THREE.SphereGeometry(3.25, 32, 32),
     new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.05, side: THREE.BackSide })
   ));
 
-  // lat/lon → 3D point on sphere surface
   function latLonTo3D(lat, lon, r) {
     const phi   = (90 - lat) * Math.PI / 180;
     const theta = (lon + 180) * Math.PI / 180;
@@ -751,7 +866,6 @@ footer .heart{color:#ef4444}
     );
   }
 
-  // 3 Locations — yellow pins + labels
   const locations = [
     { lat: 26.22, lon: 84.36, label: 'My Home' },
     { lat: 32.98, lon: 74.93, label: 'SMVDU, Katra' },
@@ -782,7 +896,6 @@ footer .heart{color:#ef4444}
     pulses.push(ring);
   });
 
-  // HTML labels overlaid on canvas
   const labelEls = locations.map(({ label }) => {
     const el = document.createElement('div');
     el.className = 'globe-label';
@@ -791,7 +904,6 @@ footer .heart{color:#ef4444}
     return el;
   });
 
-  // Orbit rings
   [[0x00d4ff, .3, 0], [0x7c3aed, .4, .4], [0xf59e0b, .5, -.3]].forEach(([c, rx, ry], i) => {
     const r = 3.6 + i * .5;
     const ring = new THREE.Mesh(
@@ -802,10 +914,8 @@ footer .heart{color:#ef4444}
     scene.add(ring);
   });
 
-  // Skill logo sprites
   const dv = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/';
   const si = 'https://cdn.simpleicons.org/';
-  // Inner ring (13) — languages, web & data
   const innerIcons = [
     dv + 'python/python-original.svg',
     dv + 'java/java-original.svg',
@@ -821,7 +931,6 @@ footer .heart{color:#ef4444}
     dv + 'matlab/matlab-original.svg',
     si + 'kaggle/20beff',
   ];
-  // Outer ring (13) — tools, ML/AI & electronics
   const outerIcons = [
     dv + 'tensorflow/tensorflow-original.svg',
     si + 'pytorch/ee4c2c',
@@ -881,7 +990,6 @@ footer .heart{color:#ef4444}
     }),
   ];
 
-  // ── Mouse / touch drag control ──
   let isDragging = false;
   let prevMouse = { x: 0, y: 0 };
   let velX = 0, velY = 0;
@@ -934,7 +1042,6 @@ footer .heart{color:#ef4444}
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
-  // Project marker 3D → screen, update label
   const _wp = new THREE.Vector3();
   const _sp = new THREE.Vector3();
   const _camDir = new THREE.Vector3(0, 0, 1);
@@ -991,7 +1098,6 @@ footer .heart{color:#ef4444}
   cam.position.set(0, 2, 14);
   cam.lookAt(0, 0, 0);
 
-  // Starfield — same style as hero
   const starGeo = new THREE.BufferGeometry();
   const starCount = 900;
   const sp = new Float32Array(starCount * 3);
@@ -1006,7 +1112,6 @@ footer .heart{color:#ef4444}
   const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size:.12, vertexColors:true, transparent:true, opacity:.85, sizeAttenuation:true }));
   scene.add(stars);
 
-  // PCB circuit lines — same style as hero
   const lMat = new THREE.LineBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: .18 });
   for (let i = 0; i < 14; i++) {
     const pts = [];
@@ -1016,7 +1121,6 @@ footer .heart{color:#ef4444}
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lMat));
   }
 
-  // Submarine — pure wireframe, identical style to hero background
   const subG = new THREE.Group();
   const wfMat = (c, o=.45) => new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: o });
 
@@ -1091,17 +1195,14 @@ footer .heart{color:#ef4444}
   const solid = c => new THREE.MeshBasicMaterial({ color: c });
   const wire  = (c, o=.7) => new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: o });
 
-  // Chassis
   const chG = new THREE.BoxGeometry(4, .65, 2.3);
   car.add(new THREE.Mesh(chG, solid(0x0a1530)), new THREE.Mesh(chG, wire(0x7c3aed)));
 
-  // Arduino board on top
   const abG = new THREE.BoxGeometry(2.2, .09, 1.6);
   const ab1 = new THREE.Mesh(abG, solid(0x0a3a20)); ab1.position.y = .42;
   const ab2 = new THREE.Mesh(abG, wire(0x00d4ff, .85)); ab2.position.y = .42;
   car.add(ab1, ab2);
 
-  // Component boxes on board
   [[-.6,.52,.3],[.1,.55,-.2],[.5,.52,.4],[-.2,.54,-.5]].forEach(([x,y,z]) => {
     const cg = new THREE.BoxGeometry(.15+Math.random()*.2,.1+Math.random()*.08,.12+Math.random()*.15);
     car.add(new THREE.Mesh(cg, solid(0x333333)));
@@ -1110,7 +1211,6 @@ footer .heart{color:#ef4444}
     car.children[car.children.length-1].position.set(x,y,z);
   });
 
-  // Ultrasonic sensors — front, left, right
   [
     { cPos:[2.15,.3,0],  cRot:[0,0,Math.PI/2] },
     { cPos:[0,.3,1.2],   cRot:[Math.PI/2,0,0] },
@@ -1123,7 +1223,6 @@ footer .heart{color:#ef4444}
     });
   });
 
-  // Wheels
   [[1.3,-.42,1.25],[1.3,-.42,-1.25],[-1.3,-.42,1.25],[-1.3,-.42,-1.25]].forEach(([x,y,z]) => {
     const wg = new THREE.CylinderGeometry(.42,.42,.28,18);
     const w1 = new THREE.Mesh(wg, solid(0x1a1a2e)); w1.rotation.x=Math.PI/2; w1.position.set(x,y,z);
@@ -1131,7 +1230,6 @@ footer .heart{color:#ef4444}
     car.add(w1,w2);
   });
 
-  // Scan beams — front, left, right (staggered pulse phases)
   const beams = [
     { bPos:[3.25,.3,0],  bRot:[0,0,Math.PI/2],   phase:0 },
     { bPos:[0,.3,2.3],   bRot:[-Math.PI/2,0,0],  phase:Math.PI*2/3 },
@@ -1148,14 +1246,12 @@ footer .heart{color:#ef4444}
 
   scene.add(car);
 
-  // Grid floor
   for (let i = -4; i <= 4; i++) {
     const lm = new THREE.LineBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: .18 });
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-4,-.76,i),new THREE.Vector3(4,-.76,i)]),lm));
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i,-.76,-4),new THREE.Vector3(i,-.76,4)]),lm));
   }
 
-  // Path dots (maze path visualization)
   const pathPts = [[2,-.68,0],[1,-.68,0],[0,-.68,0],[0,-.68,1],[0,-.68,2],[-1,-.68,2],[-2,-.68,2],[-2,-.68,1]];
   pathPts.forEach(([x,y,z]) => {
     const dot = new THREE.Mesh(new THREE.SphereGeometry(.07,6,6), new THREE.MeshBasicMaterial({ color:0xf59e0b, transparent:true, opacity:.7 }));
@@ -1215,7 +1311,6 @@ footer .heart{color:#ef4444}
       if (e.isIntersecting) {
         e.target.classList.add('shown');
         setTimeout(() => { e.target.style.transitionDelay = '0s'; }, 700);
-        // counter
         const nums = e.target.querySelectorAll('[data-target]');
         nums.forEach(n => {
           const target = +n.dataset.target;
@@ -1279,7 +1374,6 @@ async function handleForm(e) {
   window.addEventListener('scroll', () => {
     nav.style.background = scrollY > 80 ? 'rgba(5,5,16,.99)' : 'rgba(5,5,16,.97)';
   }, { passive: true });
-  // smooth stagger for skill cards
   document.querySelectorAll('.skill-card, .edu-card, .award-card').forEach((el,i) => {
     el.style.transitionDelay = (i * .08) + 's';
   });
