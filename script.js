@@ -54,6 +54,15 @@ async function handleForm(e){
   if(lbl){lbl.textContent=n===1?'Internship':'Internships';}
 })();
 
+/* Resume "Python Projects" link → land on the section and open the projects modal */
+(function(){
+  function openPyFromHash(){
+    if(location.hash==='#basic-python-projects'){openPyModal();}
+  }
+  window.addEventListener('hashchange',openPyFromHash);
+  window.addEventListener('load',openPyFromHash);
+})();
+
 /* Content protection — soft deterrent against casual copying */
 (function(){
   const isField=t=>t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA');
