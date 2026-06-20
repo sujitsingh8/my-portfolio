@@ -23,6 +23,18 @@ async function handleForm(e){
   e.preventDefault();
   const btn=e.target.querySelector('button[type="submit"]');
   const data=Object.fromEntries(new FormData(e.target));
+
+  // --- Lightweight anti-junk checks (deters casual fakes; bots are caught by the honeypot + Web3Forms) ---
+  const email=String(data.email||'').trim().toLowerCase();
+  const name=String(data.name||'').trim();
+  const domain=email.split('@')[1]||'';
+  const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const disposable=['mailinator.com','10minutemail.com','guerrillamail.com','guerrillamail.info','sharklasers.com','grr.la','temp-mail.org','tempmail.com','tempmail.dev','throwawaymail.com','yopmail.com','getnada.com','nada.email','trashmail.com','maildrop.cc','dispostable.com','fakeinbox.com','mintemail.com','mailnesia.com','emailondeck.com','mohmal.com','1secmail.com','moakt.com','tmail.io','mail7.io','spambog.com','discard.email','tempr.email','trbvm.com','byom.de'];
+  const flash=msg=>{const o=btn.innerHTML;btn.innerHTML=msg;btn.style.background='#991b1b';btn.disabled=true;setTimeout(()=>{btn.innerHTML=o;btn.style.background='';btn.disabled=false},3000);};
+  if(name.length<2){return flash('✗ Please enter your name');}
+  if(!validEmail){return flash('✗ Enter a valid email');}
+  if(disposable.includes(domain)){return flash('✗ Please use a permanent email');}
+
   const original=btn.innerHTML;
   btn.innerHTML='Sending… <i class="fas fa-spinner fa-spin"></i>';
   btn.disabled=true;
