@@ -44,3 +44,31 @@ async function handleForm(e){
   }
   setTimeout(()=>{btn.innerHTML=original;btn.style.background='';btn.disabled=false},3500);
 }
+
+/* Internship count — auto-syncs with the number of cards in the Experience section */
+(function(){
+  const n=document.querySelectorAll('#experience .exp-card').length;
+  const num=document.getElementById('internCount');
+  const lbl=document.getElementById('internLabel');
+  if(num){num.textContent=n;}
+  if(lbl){lbl.textContent=n===1?'Internship':'Internships';}
+})();
+
+/* Content protection — soft deterrent against casual copying */
+(function(){
+  const isField=t=>t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA');
+  const stop=e=>{e.preventDefault();e.stopPropagation();return false;};
+  // Right-click menu
+  document.addEventListener('contextmenu',stop);
+  // Selection / copy / cut / drag (form fields stay usable)
+  ['selectstart','copy','cut','dragstart'].forEach(ev=>
+    document.addEventListener(ev,e=>{if(isField(e.target))return;return stop(e);})
+  );
+  // Devtools & view-source / save / print shortcuts
+  document.addEventListener('keydown',e=>{
+    const k=(e.key||'').toUpperCase();
+    if(k==='F12')return stop(e);
+    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['I','J','C'].includes(k))return stop(e);
+    if((e.ctrlKey||e.metaKey)&&['U','S','P'].includes(k)&&!isField(e.target))return stop(e);
+  });
+})();
