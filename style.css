@@ -44,7 +44,7 @@ nav.scrolled{border-bottom-color:var(--border)}
 .nav-links a.cta:hover{background:var(--green-dark);color:#fff}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none}
 .hamburger span{width:22px;height:1.5px;background:var(--ink);transition:.3s;display:block}
-@media(max-width:1080px){.hamburger{display:flex}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg-elev);padding:1rem;border-top:1px solid var(--border);box-shadow:var(--sh-md);gap:.25rem}.nav-links.open{display:flex}.nav-links a{padding:.75rem 1rem}.nav-links a.cta{margin-left:0;text-align:center;justify-content:center}}
+@media(max-width:940px){.hamburger{display:flex}.nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg-elev);padding:1rem;border-top:1px solid var(--border);box-shadow:var(--sh-md);gap:.25rem}.nav-links.open{display:flex}.nav-links a{padding:.75rem 1rem}.nav-links a.cta{margin-left:0;text-align:center;justify-content:center}}
 
 /* HERO */
 #hero{padding:8rem 2rem 4rem;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(16,185,129,.08),transparent 70%),var(--bg)}
@@ -85,7 +85,7 @@ section.section{padding:5rem 2rem;position:relative}
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:3.5rem;align-items:stretch}
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:2.5rem}}
-.about-photo{width:88px;height:88px;border-radius:50%;overflow:hidden;margin-bottom:1.5rem;border:2px solid var(--bg-elev);box-shadow:0 0 0 1px var(--border-strong),var(--sh-md)}
+.about-photo{width:120px;height:120px;border-radius:50%;overflow:hidden;margin-bottom:1.5rem;border:2px solid var(--bg-elev);box-shadow:0 0 0 1px var(--border-strong),var(--sh-md)}
 .about-photo img{width:100%;height:100%;object-fit:cover;object-position:top}
 .about-text p{color:var(--ink-2);line-height:1.75;margin-bottom:1rem;font-size:.96rem}
 .about-text p strong{color:var(--ink);font-weight:600}
