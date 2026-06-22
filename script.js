@@ -1,95 +1,79 @@
-function openPyModal(){document.getElementById('pyModal').classList.add('open');document.body.style.overflow='hidden'}
-function closePyModal(e){if(e&&e.target.id!=='pyModal'&&!e.target.closest('.modal-close'))return;document.getElementById('pyModal').classList.remove('open');document.body.style.overflow=''}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePyModal()});
+// Portfolio behaviour — ported from the dc-runtime <script> (no framework needed).
+document.addEventListener('DOMContentLoaded', function () {
 
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
-
-const revealObs=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('shown'),i*60);
-      revealObs.unobserve(e.target);
-    }
-  });
-},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
-
-document.querySelectorAll('.nav-links a').forEach(a=>{
-  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
-});
-
-async function handleForm(e){
-  e.preventDefault();
-  const btn=e.target.querySelector('button[type="submit"]');
-  const data=Object.fromEntries(new FormData(e.target));
-
-  // --- Lightweight anti-junk checks (deters casual fakes; bots are caught by the honeypot + Web3Forms) ---
-  const email=String(data.email||'').trim().toLowerCase();
-  const name=String(data.name||'').trim();
-  const domain=email.split('@')[1]||'';
-  const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-  const disposable=['mailinator.com','10minutemail.com','guerrillamail.com','guerrillamail.info','sharklasers.com','grr.la','temp-mail.org','tempmail.com','tempmail.dev','throwawaymail.com','yopmail.com','getnada.com','nada.email','trashmail.com','maildrop.cc','dispostable.com','fakeinbox.com','mintemail.com','mailnesia.com','emailondeck.com','mohmal.com','1secmail.com','moakt.com','tmail.io','mail7.io','spambog.com','discard.email','tempr.email','trbvm.com','byom.de'];
-  const flash=msg=>{const o=btn.innerHTML;btn.innerHTML=msg;btn.style.background='#991b1b';btn.disabled=true;setTimeout(()=>{btn.innerHTML=o;btn.style.background='';btn.disabled=false},3000);};
-  if(name.length<2){return flash('✗ Please enter your name');}
-  if(!validEmail){return flash('✗ Enter a valid email');}
-  if(disposable.includes(domain)){return flash('✗ Please use a permanent email');}
-
-  const original=btn.innerHTML;
-  btn.innerHTML='Sending… <i class="fas fa-spinner fa-spin"></i>';
-  btn.disabled=true;
-  try{
-    const res=await fetch('https://api.web3forms.com/submit',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(data)
+  // --- hero stat pills (kept in JS so the count-up survives without churn) ---
+  var wrap = document.querySelector('.herostats');
+  if (wrap && !wrap.childElementCount) {
+    var stats = [['5', 'Projects', '#projects'], ['2', 'Degrees', '#education'], ['2', 'Internships', '#experience']];
+    stats.forEach(function (s) {
+      var n = s[0], l = s[1], href = s[2];
+      var a = document.createElement('a');
+      a.href = href;
+      a.style.cssText = 'text-decoration:none;color:inherit';
+      a.innerHTML = '<div style="font-family:\'Bricolage Grotesque\';font-weight:800;font-size:34px;line-height:1;color:var(--accent)" data-count="' + n + '">0</div>'
+                  + '<div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:4px">' + l + '</div>';
+      wrap.appendChild(a);
     });
-    const json=await res.json();
-    if(json.success){
-      btn.innerHTML='✓ Message sent';
-      btn.style.background='var(--green-dark)';
-      e.target.reset();
-    }else throw new Error();
-  }catch{
-    btn.innerHTML='✗ Failed — try emailing directly';
-    btn.style.background='#991b1b';
   }
-  setTimeout(()=>{btn.innerHTML=original;btn.style.background='';btn.disabled=false},3500);
-}
 
-/* Internship count — auto-syncs with the number of cards in the Experience section */
-(function(){
-  const n=document.querySelectorAll('#experience .exp-card').length;
-  const num=document.getElementById('internCount');
-  const lbl=document.getElementById('internLabel');
-  if(num){num.textContent=n;}
-  if(lbl){lbl.textContent=n===1?'Internship':'Internships';}
-})();
-
-/* Resume "Python Projects" link → land on the section and open the projects modal */
-(function(){
-  function openPyFromHash(){
-    if(location.hash==='#basic-python-projects'){openPyModal();}
-  }
-  window.addEventListener('hashchange',openPyFromHash);
-  window.addEventListener('load',openPyFromHash);
-})();
-
-/* Content protection — soft deterrent against casual copying */
-(function(){
-  const isField=t=>t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA');
-  const stop=e=>{e.preventDefault();e.stopPropagation();return false;};
-  // Right-click menu
-  document.addEventListener('contextmenu',stop);
-  // Selection / copy / cut / drag (form fields stay usable)
-  ['selectstart','copy','cut','dragstart'].forEach(ev=>
-    document.addEventListener(ev,e=>{if(isField(e.target))return;return stop(e);})
-  );
-  // Devtools & view-source / save / print shortcuts
-  document.addEventListener('keydown',e=>{
-    const k=(e.key||'').toUpperCase();
-    if(k==='F12')return stop(e);
-    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['I','J','C'].includes(k))return stop(e);
-    if((e.ctrlKey||e.metaKey)&&['U','S','P'].includes(k)&&!isField(e.target))return stop(e);
+  // --- scroll reveal (rAF-driven; reliable across browsers) ---
+  function show(el) { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  reveals.forEach(function (el) {
+    if (el.__revealed) { show(el); return; }
+    el.style.opacity = '0'; el.style.transform = 'translateY(28px)';
   });
-})();
+
+  function reveal(el) {
+    if (el.__revealed) return; el.__revealed = true;
+    var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+    var dur = 640, t0 = null;
+    function run(now) {
+      if (t0 == null) t0 = now;
+      var p = Math.min((now - t0 - delay) / dur, 1);
+      if (p < 0) { requestAnimationFrame(run); return; }
+      var e = 1 - Math.pow(1 - p, 3);
+      el.style.opacity = String(e);
+      el.style.transform = 'translateY(' + (28 * (1 - e)).toFixed(2) + 'px)';
+      if (p < 1) requestAnimationFrame(run); else show(el);
+    }
+    requestAnimationFrame(run);
+  }
+
+  function animateCount(el) {
+    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    var dur = 1300, start = performance.now();
+    function step(now) {
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var counters = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+  function fireCount(el) { if (el.__done) return; el.__done = true; animateCount(el); }
+
+  function check() {
+    var h = window.innerHeight || 800;
+    reveals.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < h * 0.9 && r.bottom > 0) reveal(el); });
+    counters.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < h * 0.85 && r.bottom > 0) fireCount(el); });
+  }
+  requestAnimationFrame(function () { check(); requestAnimationFrame(check); });
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  setTimeout(function () { reveals.forEach(function (el) { el.__revealed = true; show(el); }); counters.forEach(fireCount); }, 1800);
+
+  // --- contact form (demo: no backend) ---
+  var form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.textContent = 'Message sent \u2713';
+      var msg = document.getElementById('sentMsg');
+      if (msg) msg.style.display = '';
+    });
+  }
+});
