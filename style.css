@@ -124,7 +124,9 @@ img{ -webkit-user-drag:none; -khtml-user-drag:none; -moz-user-drag:none; -o-user
   .navlinks.open{ display:flex; }
   .navlinks a{ padding:13px 12px; font-size:16px; border-radius:10px; }
 
-  header#hero{ grid-template-columns:1fr !important; min-height:auto !important; padding-top:64px !important; padding-bottom:48px !important; gap:30px !important; }
+  header#hero{ grid-template-columns:1fr !important; min-height:auto !important; padding-top:64px !important; padding-bottom:26px !important; gap:30px !important; }
+  .hero-photo{ margin-top:18px; }
+  .sec-skills{ padding-top:34px !important; }
   .scroll-cue{ display:none !important; }
   .about-grid{ grid-template-columns:1fr !important; }
   .skills-grid{ grid-template-columns:1fr !important; }
