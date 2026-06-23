@@ -65,15 +65,35 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', check);
   setTimeout(function () { reveals.forEach(function (el) { el.__revealed = true; show(el); }); counters.forEach(fireCount); }, 1800);
 
-  // --- contact form (demo: no backend) ---
+  // --- contact form (Web3Forms) ---
   var form = document.getElementById('contactForm');
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var btn = form.querySelector('button[type="submit"]');
-      if (btn) btn.textContent = 'Message sent \u2713';
-      var msg = document.getElementById('sentMsg');
-      if (msg) msg.style.display = '';
+      var original = btn ? btn.textContent : 'Send message';
+      if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.success) {
+          var msg = document.getElementById('sentMsg');
+          if (msg) msg.style.display = '';
+          if (btn) btn.textContent = 'Message sent \u2713';
+          form.reset();
+        } else {
+          if (btn) { btn.textContent = original; btn.disabled = false; }
+          alert('Sorry, something went wrong. Please email me directly.');
+        }
+      })
+      .catch(function () {
+        if (btn) { btn.textContent = original; btn.disabled = false; }
+        alert('Sorry, something went wrong. Please email me directly.');
+      });
     });
   }
 });

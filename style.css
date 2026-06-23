@@ -42,14 +42,19 @@
 .skill-tag:hover{ transform:translateY(-2px); border-color:var(--accent); box-shadow:0 6px 14px rgba(43,34,24,.08); }
 .skill-tag i{ font-size:16px; line-height:1; }
 
+/* ---- experience cards: clickable ---- */
+.exp-card{ cursor:pointer; transition:transform .3s, box-shadow .3s; }
+.exp-card:hover{ transform:translateY(-6px) !important; box-shadow:0 18px 40px rgba(43,34,24,.13) !important; }
+.exp-card:active{ transform:translateY(-1px) scale(.995) !important; box-shadow:0 8px 18px rgba(43,34,24,.1) !important; }
+
 /* ---- glance card: clickable ---- */
 .glance-card{ cursor:pointer; transition:transform .3s, box-shadow .3s; }
 .glance-card:hover{ transform:translateY(-6px) !important; box-shadow:0 18px 38px rgba(43,34,24,.13) !important; }
 .glance-card:active{ transform:translateY(-1px) scale(.99) !important; box-shadow:0 8px 18px rgba(43,34,24,.1) !important; }
 
-/* ---- hero floating badges: clickable (no transform so the float keeps running) ---- */
-.hero-badge{ cursor:pointer; transition:box-shadow .25s, filter .25s; }
-.hero-badge:hover{ box-shadow:0 16px 34px rgba(43,34,24,.3) !important; filter:brightness(1.06); }
+/* ---- hero floating badges: clickable + lift on hover (float lives on the wrapper) ---- */
+.hero-badge{ cursor:pointer; transition:transform .25s, box-shadow .25s; }
+.hero-badge:hover{ transform:translateY(-4px); box-shadow:0 16px 34px rgba(43,34,24,.3) !important; }
 
 /* ---- hero stat counts: clickable ---- */
 .herostats a{ cursor:pointer; transition:transform .2s; border-radius:12px; }
@@ -57,5 +62,4 @@
 .herostats a:active{ transform:scale(.94); }
 
 /* ---- responsive ---- */
-.glance-col{ margin-top:96px; }
-@media (max-width:760px){ .about-grid{ grid-template-columns:1fr !important; gap:32px !important; } .glance-col{ margin-top:0; } }
+@media (max-width:768px){ .about-grid{ grid-template-columns:1fr !important; gap:32px !important; } }
