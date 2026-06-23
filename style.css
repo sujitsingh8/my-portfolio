@@ -135,6 +135,8 @@ img{ -webkit-user-drag:none; -khtml-user-drag:none; -moz-user-drag:none; -o-user
   .cw-grid{ grid-template-columns:1fr !important; gap:40px !important; }
   .contact-grid{ grid-template-columns:1fr !important; gap:28px !important; }
   .proj-terminal-card{ grid-template-columns:1fr !important; }
+  .exp-card{ grid-template-columns:1fr !important; gap:16px !important; }
+  .exp-card > img{ width:54px !important; height:54px !important; border-radius:13px !important; }
 }
 
 @media (max-width:560px){
