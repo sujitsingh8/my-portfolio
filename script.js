@@ -68,8 +68,42 @@ document.addEventListener('DOMContentLoaded', function () {
   // --- contact form (Web3Forms) ---
   var form = document.getElementById('contactForm');
   if (form) {
+    var checks = {
+      name: { test: function (v) { return /^[a-zA-Z\u00C0-\u024F][a-zA-Z\u00C0-\u024F\s.'-]{1,}$/.test(v.trim()); },
+              msg: 'Please enter your name — letters only, at least 2 characters.' },
+      email: { test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); },
+               msg: 'Please enter a valid email address.' },
+      message: { test: function (v) { return v.trim().length >= 10; },
+                 msg: 'Please enter a message of at least 10 characters.' }
+    };
+    function setError(name, show) {
+      var el = form.querySelector('[name="' + name + '"]');
+      var err = form.querySelector('[data-err="' + name + '"]');
+      if (el) el.classList.toggle('invalid', show);
+      if (err) {
+        if (show) { err.textContent = checks[name].msg; err.classList.add('show'); }
+        else err.classList.remove('show');
+      }
+    }
+    function validate() {
+      var firstBad = null;
+      Object.keys(checks).forEach(function (name) {
+        var el = form.querySelector('[name="' + name + '"]');
+        var valid = el && checks[name].test(el.value || '');
+        setError(name, !valid);
+        if (!valid && !firstBad) firstBad = el;
+      });
+      if (firstBad) firstBad.focus();
+      return !firstBad;
+    }
+    Object.keys(checks).forEach(function (name) {
+      var el = form.querySelector('[name="' + name + '"]');
+      if (el) el.addEventListener('input', function () { setError(name, false); });
+    });
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (!validate()) return;
       var btn = form.querySelector('button[type="submit"]');
       var original = btn ? btn.textContent : 'Send message';
       if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
