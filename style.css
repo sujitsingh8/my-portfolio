@@ -126,7 +126,8 @@ img{ -webkit-user-drag:none; -khtml-user-drag:none; -moz-user-drag:none; -o-user
 
   header#hero{ grid-template-columns:1fr !important; min-height:auto !important; padding-top:64px !important; padding-bottom:26px !important; gap:30px !important; }
   .hero-photo{ margin-top:18px; }
-  .sec-skills{ padding-top:34px !important; }
+  .sec-about{ padding-bottom:24px !important; }
+  .sec-skills{ padding-top:30px !important; }
   .scroll-cue{ display:none !important; }
   .about-grid{ grid-template-columns:1fr !important; }
   .skills-grid{ grid-template-columns:1fr !important; }
