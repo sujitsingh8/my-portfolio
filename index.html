@@ -18,7 +18,7 @@
 <!-- ===== NAV ===== -->
 <nav style="position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(10px);background:rgba(251,243,231,.78);border-bottom:1px solid var(--line)">
   <div style="max-width:1440px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:flex-start;gap:20px">
-    <a href="#hero" style="display:flex;align-items:center;gap:11px;font-family:'Bricolage Grotesque';font-weight:800;font-size:20px;letter-spacing:-.02em">
+    <a href="#hero" class="nav-logo" style="display:flex;align-items:center;gap:11px;font-family:'Bricolage Grotesque';font-weight:800;font-size:20px;letter-spacing:-.02em">
       <span style="display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:var(--ink);color:var(--bg);font-size:17px;transform:rotate(-6deg)">S</span>
       Sujit Kumar<span style="color:var(--accent)">.</span>
     </a>
@@ -31,7 +31,8 @@
       <a class="hv1" href="#certifications" style="padding:8px 13px;border-radius:11px;font-weight:600;font-size:14.5px;color:var(--muted)">Certificates</a>
       <a class="hv1" href="#contact" style="padding:8px 13px;border-radius:11px;font-weight:600;font-size:14.5px;color:var(--muted)">Contact</a>
     </div>
-    <a class="hv2" href="https://sujitsingh8.github.io/my-portfolio/Files/resume.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:13px;font-weight:700;font-size:14.5px;box-shadow:0 6px 18px rgba(43,34,24,.18)">Resume ↗</a>
+    <a class="hv2 nav-resume" href="https://sujitsingh8.github.io/my-portfolio/Files/resume.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:13px;font-weight:700;font-size:14.5px;box-shadow:0 6px 18px rgba(43,34,24,.18)">Resume ↗</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -85,7 +86,7 @@
     </div>
   </div>
 
-  <a href="#about" style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">
+  <a href="#about" class="scroll-cue" style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">
     Scroll
     <span style="font-size:20px;animation:bobArrow 1.8s ease-in-out infinite">↓</span>
   </a>
@@ -163,64 +164,80 @@
   <div style="max-width:1280px;margin:0 auto;padding:90px 24px;position:relative;z-index:2">
     <div data-reveal style="display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)"><span style="width:24px;height:2px;background:var(--amber)"></span>Projects</div>
     <h2 data-reveal style="font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;margin-top:14px">What I've <span style="font-style:italic;color:var(--amber)">built</span></h2>
-    <p data-reveal style="color:rgba(251,243,231,.6);font-size:16.5px;margin-top:12px;max-width:560px">A collection of Python projects built while learning the language — each one a small, finished thing I shipped to GitHub.</p>
+    <!-- projects list — new (non-Python) project cards go above or below the terminal card -->
+    <div style="margin-top:36px;display:flex;flex-direction:column;gap:22px" class="proj-list">
 
-    <!-- terminal -->
-    <div data-reveal style="margin-top:34px;background:#1d1710;border:1px solid rgba(244,183,64,.2);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4)">
-      <div style="display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.07)">
-        <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span>
-        <span style="width:12px;height:12px;border-radius:50%;background:#febc2e"></span>
-        <span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span>
-        <span style="margin-left:8px;font-family:'JetBrains Mono';font-size:12.5px;color:rgba(251,243,231,.5)">sujit@portfolio: ~/python-projects</span>
+      <!-- Python projects · terminal card (click anywhere to open all 5) -->
+      <div id="projTerminalCard" class="proj-terminal-card" data-reveal role="button" tabindex="0" aria-haspopup="dialog" style="display:grid;grid-template-columns:minmax(0,0.82fr) 1fr;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;overflow:hidden">
+        <div style="background:#1d1710;border-right:1px solid rgba(255,255,255,.07)">
+          <div style="display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.07)">
+            <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span>
+            <span style="width:12px;height:12px;border-radius:50%;background:#febc2e"></span>
+            <span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span>
+            <span style="margin-left:8px;font-family:'JetBrains Mono';font-size:12.5px;color:rgba(251,243,231,.5)">sujit@portfolio: ~/python-projects</span>
+          </div>
+          <div style="padding:22px;font-family:'JetBrains Mono';font-size:13.5px;line-height:2;color:#e8dcc8">
+            <div><span style="color:var(--sage)">$</span> python expense_tracker.py</div>
+            <div style="color:rgba(251,243,231,.55)">&rarr; Loading entries... done &check;</div>
+            <div style="margin-top:8px"><span style="color:var(--sage)">$</span> python snake_game.py</div>
+            <div style="color:rgba(251,243,231,.55)">&rarr; Score: 12 &middot; difficulty: hard</div>
+            <div style="margin-top:8px"><span style="color:var(--sage)">$</span> python typing_speed.py <span style="display:inline-block;width:9px;height:16px;background:var(--amber);vertical-align:-3px;animation:blink 1.1s step-end infinite"></span></div>
+          </div>
+        </div>
+        <div style="padding:30px 34px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:23px;letter-spacing:-.01em">Python Projects &mdash; Terminal</div>
+          <p style="color:rgba(251,243,231,.62);font-size:15px;line-height:1.6;margin-top:12px">A collection of Python projects built while learning the language &mdash; Personal Expense Tracker, Snake Game, Football Match Predictor, QR Code Generator, and Typing Speed Test.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:18px">
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600;color:var(--amber);background:rgba(244,183,64,.12);border:1px solid rgba(244,183,64,.25);padding:5px 12px;border-radius:999px">python</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600;color:var(--amber);background:rgba(244,183,64,.12);border:1px solid rgba(244,183,64,.25);padding:5px 12px;border-radius:999px">5 projects</span>
+          </div>
+          <div class="proj-card-cta" style="margin-top:20px;font-weight:700;font-size:14.5px;color:var(--amber)">View all 5 projects &rarr;</div>
+        </div>
       </div>
-      <div style="padding:22px;font-family:'JetBrains Mono';font-size:14px;line-height:2;color:#e8dcc8">
-        <div><span style="color:var(--sage)">$</span> python expense_tracker.py</div>
-        <div style="color:rgba(251,243,231,.55)">→ Loading entries... done. Monthly summary ready ✓</div>
-        <div style="margin-top:8px"><span style="color:var(--sage)">$</span> python snake_game.py</div>
-        <div style="color:rgba(251,243,231,.55)">→ Score: 12 · difficulty: hard</div>
-        <div style="margin-top:8px"><span style="color:var(--sage)">$</span> python typing_speed.py <span style="display:inline-block;width:9px;height:17px;background:var(--amber);vertical-align:-3px;animation:blink 1.1s step-end infinite"></span></div>
-      </div>
-    </div>
 
-    <!-- project cards -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px" class="proj-grid">
-      <a class="hv6" data-reveal href="https://github.com/sujitsingh8/expense-tracker" target="_blank" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;transition:transform .3s,background .3s,border-color .3s">
-        <div style="font-size:13px;font-family:'JetBrains Mono';color:var(--amber)">01 · Python</div>
-        <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin-top:10px">Personal Expense Tracker</div>
-        <p style="color:rgba(251,243,231,.6);font-size:14.5px;line-height:1.55;margin-top:8px">Track expenses, filter by category, view monthly summaries and charts.</p>
-        <div style="margin-top:16px;font-weight:700;font-size:14px;color:var(--amber)">View on GitHub ↗</div>
-      </a>
-      <a class="hv6" data-reveal data-reveal-delay="80" href="https://github.com/sujitsingh8/snake-game" target="_blank" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;transition:transform .3s,background .3s,border-color .3s">
-        <div style="font-size:13px;font-family:'JetBrains Mono';color:var(--amber)">02 · Python</div>
-        <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin-top:10px">Snake Game</div>
-        <p style="color:rgba(251,243,231,.6);font-size:14.5px;line-height:1.55;margin-top:8px">Classic snake with 3 difficulty levels and smooth terminal rendering.</p>
-        <div style="margin-top:16px;font-weight:700;font-size:14px;color:var(--amber)">View on GitHub ↗</div>
-      </a>
-      <a class="hv6" data-reveal data-reveal-delay="160" href="https://github.com/sujitsingh8/football-match-predictor" target="_blank" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;transition:transform .3s,background .3s,border-color .3s">
-        <div style="font-size:13px;font-family:'JetBrains Mono';color:var(--amber)">03 · Python</div>
-        <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin-top:10px">Football Match Predictor</div>
-        <p style="color:rgba(251,243,231,.6);font-size:14.5px;line-height:1.55;margin-top:8px">Predicts outcomes between top European clubs using history, form, and xG.</p>
-        <div style="margin-top:16px;font-weight:700;font-size:14px;color:var(--amber)">View on GitHub ↗</div>
-      </a>
-      <a class="hv6" data-reveal href="https://github.com/sujitsingh8/qr-generator" target="_blank" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;transition:transform .3s,background .3s,border-color .3s">
-        <div style="font-size:13px;font-family:'JetBrains Mono';color:var(--amber)">04 · Python</div>
-        <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin-top:10px">QR Code Generator</div>
-        <p style="color:rgba(251,243,231,.6);font-size:14.5px;line-height:1.55;margin-top:8px">Generate QR codes for any URL or text and save them as PNG.</p>
-        <div style="margin-top:16px;font-weight:700;font-size:14px;color:var(--amber)">View on GitHub ↗</div>
-      </a>
-      <a class="hv6" data-reveal data-reveal-delay="80" href="https://github.com/sujitsingh8/typing-speed" target="_blank" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;transition:transform .3s,background .3s,border-color .3s">
-        <div style="font-size:13px;font-family:'JetBrains Mono';color:var(--amber)">05 · Python</div>
-        <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin-top:10px">Typing Speed Test</div>
-        <p style="color:rgba(251,243,231,.6);font-size:14.5px;line-height:1.55;margin-top:8px">Timed and free modes with live colour-coded feedback and WPM tracking.</p>
-        <div style="margin-top:16px;font-weight:700;font-size:14px;color:var(--amber)">View on GitHub ↗</div>
-      </a>
-      <a class="hv7" data-reveal data-reveal-delay="160" href="https://github.com/sujitsingh8" target="_blank" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,rgba(238,123,47,.18),rgba(244,183,64,.1));border:1px dashed rgba(244,183,64,.45);border-radius:18px;padding:24px;transition:transform .3s">
-        <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;color:var(--amber)">+more</div>
-        <div style="color:rgba(251,243,231,.7);font-size:14px;margin-top:6px;font-weight:600">Everything on my GitHub →</div>
-      </a>
+      <!-- add future non-Python project cards in this list, above or below the terminal card -->
+
     </div>
   </div>
 </section>
+
+<!-- ===== PROJECTS MODAL ===== -->
+<div id="projModal" class="proj-modal" aria-hidden="true">
+  <div class="proj-modal-backdrop" data-close></div>
+  <div class="proj-modal-panel" role="dialog" aria-modal="true" aria-label="Python projects">
+    <button class="proj-modal-x" data-close aria-label="Close">&times;</button>
+    <div class="pm-eyebrow">Python &middot; 5 projects</div>
+    <div class="pm-title">Python Projects &mdash; Terminal</div>
+    <p class="pm-sub">Terminal-based Python projects I built while learning the language.</p>
+    <div class="proj-modal-list">
+      <a class="proj-modal-item" href="https://github.com/sujitsingh8/expense-tracker" target="_blank" rel="noopener">
+        <span class="num">01</span>
+        <span class="body"><span class="nm">Personal Expense Tracker</span><span class="ds">Track expenses, filter by category, view monthly summaries and charts.</span></span>
+        <span class="gh">View &nearr;</span>
+      </a>
+      <a class="proj-modal-item" href="https://github.com/sujitsingh8/snake-game" target="_blank" rel="noopener">
+        <span class="num">02</span>
+        <span class="body"><span class="nm">Snake Game</span><span class="ds">Classic snake with 3 difficulty levels and smooth terminal rendering.</span></span>
+        <span class="gh">View &nearr;</span>
+      </a>
+      <a class="proj-modal-item" href="https://github.com/sujitsingh8/football-match-predictor" target="_blank" rel="noopener">
+        <span class="num">03</span>
+        <span class="body"><span class="nm">Football Match Predictor</span><span class="ds">Predicts outcomes between top European clubs using history, form, and xG.</span></span>
+        <span class="gh">View &nearr;</span>
+      </a>
+      <a class="proj-modal-item" href="https://github.com/sujitsingh8/qr-generator" target="_blank" rel="noopener">
+        <span class="num">04</span>
+        <span class="body"><span class="nm">QR Code Generator</span><span class="ds">Generate QR codes for any URL or text and save them as PNG.</span></span>
+        <span class="gh">View &nearr;</span>
+      </a>
+      <a class="proj-modal-item" href="https://github.com/sujitsingh8/typing-speed" target="_blank" rel="noopener">
+        <span class="num">05</span>
+        <span class="body"><span class="nm">Typing Speed Test</span><span class="ds">Timed and free modes with live colour-coded feedback and WPM tracking.</span></span>
+        <span class="gh">View &nearr;</span>
+      </a>
+    </div>
+  </div>
+</div>
 
 <!-- ===== EXPERIENCE ===== -->
 <section id="experience" style="max-width:1280px;margin:0 auto;padding:90px 24px">
@@ -356,9 +373,6 @@
           <div class="field-err" data-err="message"></div>
         </div>
         <button class="hv12" type="submit" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:13px;padding:15px;font-weight:700;font-size:15.5px;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px rgba(238,123,47,.32);transition:transform .25s">Send message</button>
-      </div>
-      <div id="sentMsg" style="display:none">
-        <div style="margin-top:14px;text-align:center;color:var(--sage);font-weight:700;font-size:14.5px;animation:fadeUp .4s both">Thanks for reaching out! Your message has been sent — I'll get back to you soon. ✓</div>
       </div>
     </form>
   </div>

@@ -115,9 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.success) {
-          var msg = document.getElementById('sentMsg');
-          if (msg) msg.style.display = '';
-          if (btn) btn.textContent = 'Message sent \u2713';
+          if (btn) { btn.textContent = 'Message sent \u2713'; btn.disabled = true; }
           form.reset();
         } else {
           if (btn) { btn.textContent = original; btn.disabled = false; }
@@ -130,4 +128,76 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+
+  // --- projects modal (terminal card opens all 5) ---
+  var projCard = document.getElementById('projTerminalCard');
+  var projModal = document.getElementById('projModal');
+  var PROJ_HASH = '#basic-python-projects';
+  function openProj(setHash) {
+    if (projModal) { projModal.classList.add('open'); projModal.setAttribute('aria-hidden', 'false'); document.body.classList.add('modal-open'); }
+    if (setHash !== false && location.hash !== PROJ_HASH) history.replaceState(null, '', PROJ_HASH);
+  }
+  function closeProj() {
+    if (projModal) { projModal.classList.remove('open'); projModal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('modal-open'); }
+    if (location.hash === PROJ_HASH) history.replaceState(null, '', location.pathname + location.search);
+  }
+  if (projCard) {
+    projCard.addEventListener('click', function () { openProj(); });
+    projCard.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProj(); } });
+  }
+  if (projModal) {
+    Array.prototype.slice.call(projModal.querySelectorAll('[data-close]')).forEach(function (el) {
+      el.addEventListener('click', closeProj);
+    });
+  }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeProj(); });
+  // open via shareable hash (e.g. /#basic-python-projects)
+  if (location.hash === PROJ_HASH) openProj(false);
+  window.addEventListener('hashchange', function () {
+    if (location.hash === PROJ_HASH) openProj(false);
+    else if (projModal && projModal.classList.contains('open')) closeProj();
+  });
+
+  // --- mobile nav (hamburger) ---
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.querySelector('.navlinks');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', function () {
+      var open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    Array.prototype.slice.call(navLinks.querySelectorAll('a')).forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // --- content protection (deterrent) ---
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  ['copy', 'cut'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      e.preventDefault();
+    });
+  });
+  document.addEventListener('selectstart', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    e.preventDefault();
+  });
+  document.addEventListener('dragstart', function (e) {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  });
+  document.addEventListener('keydown', function (e) {
+    var k = (e.key || '').toLowerCase();
+    var inField = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
+    if (e.key === 'F12') { e.preventDefault(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return; }
+    if ((e.ctrlKey || e.metaKey) && k === 'u') { e.preventDefault(); return; }
+    if ((e.ctrlKey || e.metaKey) && (k === 's' || k === 'p')) { e.preventDefault(); return; }
+    if ((e.ctrlKey || e.metaKey) && (k === 'c' || k === 'x' || k === 'a') && !inField) { e.preventDefault(); return; }
+  });
 });
