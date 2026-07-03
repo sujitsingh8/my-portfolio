@@ -201,3 +201,98 @@ document.addEventListener('DOMContentLoaded', function () {
     if ((e.ctrlKey || e.metaKey) && (k === 'c' || k === 'x' || k === 'a') && !inField) { e.preventDefault(); return; }
   });
 });
+// --- NIT Patna experience modal + photo slideshow ---
+document.addEventListener('DOMContentLoaded', function () {
+  var card = document.getElementById('nitpCard');
+  var modal = document.getElementById('nitpModal');
+  if (!card || !modal) return;
+
+  var autoTimer = null;
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(function () { step(1); }, 3200);
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+  function openNitp() {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    idx = 0; render();
+    startAuto();
+  }
+  function closeNitp() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    stopAuto();
+  }
+
+  card.addEventListener('click', function (e) {
+    // don't hijack clicks on the NIT Patna website link inside the card
+    if (e.target && e.target.closest && e.target.closest('a')) return;
+    openNitp();
+  });
+  card.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openNitp(); }
+  });
+  Array.prototype.slice.call(modal.querySelectorAll('[data-close-nitp]')).forEach(function (el) {
+    el.addEventListener('click', closeNitp);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNitp();
+  });
+
+  // --- slideshow ---
+  var slides = Array.prototype.slice.call(modal.querySelectorAll('.nitp-slide'));
+  var counter = document.getElementById('nitpCounter');
+  var idx = 0;
+
+  slides.forEach(function (img) {
+    img.addEventListener('error', function () {
+      img.classList.add('broken');
+      if (!img.__ph) {
+        img.__ph = document.createElement('div');
+        img.__ph.className = 'nitp-missing';
+        img.__ph.textContent = 'Add photo: ' + img.getAttribute('src');
+        img.__ph.style.display = 'none';
+        img.parentNode.insertBefore(img.__ph, img);
+      }
+    });
+  });
+
+  function render() {
+    slides.forEach(function (img, i) {
+      var on = i === idx;
+      img.classList.toggle('active', on);
+      if (img.__ph) img.__ph.style.display = on ? 'grid' : 'none';
+    });
+    if (counter) counter.textContent = (idx + 1) + ' / ' + slides.length;
+  }
+  function step(d) { idx = (idx + d + slides.length) % slides.length; render(); }
+
+  var prev = document.getElementById('nitpPrev');
+  var next = document.getElementById('nitpNext');
+  if (prev) prev.addEventListener('click', function (e) { e.stopPropagation(); step(-1); startAuto(); });
+  if (next) next.addEventListener('click', function (e) { e.stopPropagation(); step(1); startAuto(); });
+
+  // arrow keys while modal is open
+  document.addEventListener('keydown', function (e) {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') { step(-1); startAuto(); }
+    if (e.key === 'ArrowRight') { step(1); startAuto(); }
+  });
+
+  // swipe on touch devices
+  var tx = null;
+  modal.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  modal.addEventListener('touchend', function (e) {
+    if (tx == null) return;
+    var dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 45) { step(dx < 0 ? 1 : -1); startAuto(); }
+    tx = null;
+  }, { passive: true });
+
+  render();
+});
