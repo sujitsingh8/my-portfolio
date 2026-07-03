@@ -138,6 +138,7 @@ img{ -webkit-user-drag:none; -khtml-user-drag:none; -moz-user-drag:none; -o-user
   .exp-card{ grid-template-columns:54px 1fr !important; gap:14px !important; padding:20px !important; }
   .exp-card > img{ width:54px !important; height:54px !important; border-radius:13px !important; }
   .exp-card .exp-meta{ margin-left:0 !important; flex-basis:100% !important; }
+  .exp-card .exp-desc{ grid-column:1 / -1 !important; margin-top:2px !important; }
 }
 
 @media (max-width:560px){
