@@ -174,32 +174,40 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // --- content protection (deterrent) ---
-  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-  ['copy', 'cut'].forEach(function (evt) {
-    document.addEventListener(evt, function (e) {
-      var t = e.target;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
-      e.preventDefault();
-    });
-  });
-  document.addEventListener('selectstart', function (e) {
+  // --- inspect deterrent (copying, selecting, saving & printing are allowed) ---
+  // right-click is allowed on photos & file links so visitors can download them
+  document.addEventListener('contextmenu', function (e) {
     var t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    if (t && t.closest && t.closest('img, a')) return;
     e.preventDefault();
-  });
-  document.addEventListener('dragstart', function (e) {
-    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
   });
   document.addEventListener('keydown', function (e) {
     var k = (e.key || '').toLowerCase();
-    var inField = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
     if (e.key === 'F12') { e.preventDefault(); return; }
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return; }
     if ((e.ctrlKey || e.metaKey) && k === 'u') { e.preventDefault(); return; }
-    if ((e.ctrlKey || e.metaKey) && (k === 's' || k === 'p')) { e.preventDefault(); return; }
-    if ((e.ctrlKey || e.metaKey) && (k === 'c' || k === 'x' || k === 'a') && !inField) { e.preventDefault(); return; }
   });
+
+  // --- phones: block "Desktop site" mode ---
+  function isTouchOnlyDevice() {
+    return window.matchMedia && window.matchMedia('(pointer:coarse) and (hover:none)').matches && (navigator.maxTouchPoints || 0) > 1;
+  }
+  function checkDesktopMode() {
+    var el = document.getElementById('desktopBlock');
+    var blocked = isTouchOnlyDevice() && window.innerWidth >= 980;
+    if (blocked && !el) {
+      el = document.createElement('div');
+      el.id = 'desktopBlock';
+      el.innerHTML = '<div class="db-card"><div class="db-emoji">\uD83D\uDCF1</div><div class="db-title">Desktop mode detected</div><p class="db-msg">This portfolio is designed for your phone\u2019s screen.<br>Please turn off <strong>&ldquo;Desktop site&rdquo;</strong> in your browser menu (\u22EE) to continue.</p></div>';
+      document.body.appendChild(el);
+      document.body.style.overflow = 'hidden';
+    } else if (!blocked && el) {
+      el.parentNode.removeChild(el);
+      document.body.style.overflow = '';
+    }
+  }
+  checkDesktopMode();
+  window.addEventListener('resize', checkDesktopMode);
 });
 // --- NIT Patna experience modal + photo slideshow ---
 document.addEventListener('DOMContentLoaded', function () {
