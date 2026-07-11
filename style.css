@@ -160,8 +160,6 @@ body.modal-open{ overflow:hidden; }
 .nitp-points li{ display:flex; gap:9px; }
 .nitp-points .dot{ flex:none; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-top:8.5px; opacity:.85; }
 
-/* ---- NIT Patna modal: separate header from description ---- */
-#nitpModal .pm-sub{ padding-bottom:18px; border-bottom:1px solid var(--line); }
 
 /* ---- desktop-mode blocker (phones only) ---- */
 #desktopBlock{ position:fixed; inset:0; z-index:100000; background:var(--bg); display:grid; place-items:center; padding:28px; }
@@ -169,3 +167,11 @@ body.modal-open{ overflow:hidden; }
 #desktopBlock .db-emoji{ font-size:44px; }
 #desktopBlock .db-title{ font-family:'Bricolage Grotesque'; font-weight:800; font-size:22px; margin-top:14px; color:var(--ink); }
 #desktopBlock .db-msg{ margin-top:10px; font-size:15px; line-height:1.65; color:var(--muted); }
+/* ---- NIT Patna modal: button row (GitHub + Read review report) ---- */
+.nitp-btnrow a{ transition:transform .2s, box-shadow .2s, background .2s; }
+.nitp-btnrow a:hover{ transform:translateY(-2px); }
+.nitp-report:hover{ background:rgba(238,123,47,.2) !important; }
+@media (max-width:520px){
+  .nitp-btnrow{ flex-direction:column; }
+  .nitp-btnrow a{ width:100%; }
+}
