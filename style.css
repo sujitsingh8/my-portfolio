@@ -67,6 +67,15 @@
 /* ---- responsive ---- */
 @media (max-width:768px){ .about-grid{ grid-template-columns:1fr !important; gap:32px !important; } }
 
+/* ---- glance card: on wide screens, grow rightward only (into the empty right-side
+   space) so the Experience line fits on one line — left "About me" column is untouched ---- */
+@media (min-width:1440px){ .glance-card{ width:-webkit-max-content; width:max-content; } }
+
+/* ---- hero right-side badges: left-align them (Afflatus starts where Research starts),
+   letting the wider Afflatus badge extend to the right instead of over the photo.
+   Desktop only — the phone layout keeps the original right-anchored positions. ---- */
+@media (min-width:861px){ .bf-right{ right:auto !important; left:232px !important; width:-webkit-max-content !important; width:max-content !important; } }
+
 /* projects terminal card + modal */
 .proj-terminal-card{ cursor:pointer; transition:transform .3s, border-color .3s, box-shadow .3s; }
 .proj-terminal-card:hover{ transform:translateY(-4px) !important; border-color:rgba(244,183,64,.5) !important; box-shadow:0 24px 50px rgba(0,0,0,.4) !important; }
@@ -129,6 +138,7 @@ body.modal-open{ overflow:hidden; }
   .about-grid{ grid-template-columns:1fr !important; }
   .skills-grid{ grid-template-columns:1fr !important; }
   .edu-grid{ grid-template-columns:1fr !important; }
+  .exp-grid{ grid-template-columns:1fr !important; }
   .cw-grid{ grid-template-columns:1fr !important; gap:40px !important; }
   .contact-grid{ grid-template-columns:1fr !important; gap:28px !important; }
   .proj-terminal-card{ grid-template-columns:1fr !important; }
